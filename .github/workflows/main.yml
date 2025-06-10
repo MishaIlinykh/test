@@ -28,7 +28,7 @@ jobs:
     
     - name: Test with pytest
       run: |
-        pytest test_storage/run_app
+        pytest test_storage/scr/main
 
   notify:
     needs: build
