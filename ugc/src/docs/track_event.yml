@@ -1,0 +1,23 @@
+tags:
+  - Events
+parameters:
+  - in: query
+    name: event_type
+    required: true
+    schema:
+      type: string
+      enum: [click, change_view_resolution, video_timing, scroll, hover]
+    description: Тип события
+  - in: query
+    name: content
+    required: false
+    schema:
+      type: string
+    description: JSON-строка с дополнительными метаданными
+responses:
+  '201':
+    description: Event tracked successfully
+  '400':
+    description: Invalid input
+  '401':
+    description: Unauthorized or invalid token
