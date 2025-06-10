@@ -40,4 +40,7 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
         token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        message: "Pipeline completed successfully!"
+        message: >
+          Pipeline finished!
+          Status: ${{ job.status }}
+          Job URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
