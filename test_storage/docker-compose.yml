@@ -1,0 +1,84 @@
+name: "test_storage"
+
+services:
+
+  test_api:
+    container_name: test_benchmark
+    build: .
+    networks:
+      - main_network_test
+    depends_on:
+      clickhouse-server:
+        condition: service_healthy
+    volumes:
+      - ./src:/opt/app/src
+    expose:
+      - "9001"
+
+
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-server
+    env_file:
+      - ./src/core/.env 
+    ports:
+      - "8123:8123"  
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8123/ping || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5 
+    networks:
+      - main_network_test 
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  vertica:
+    image: vertica/vertica-ce:latest
+    container_name: vertica
+    ports:
+      - "5433:5433"
+    environment:
+      - VERTICA_DB_NAME=docker
+      - VERTICA_DB_PASSWORD=
+    networks:
+      - main_network_test 
+    volumes:
+      - vertica_data:/data
+
+
+
+  # clickhouse-server:
+  #   image: clickhouse/clickhouse-server:23
+  #   container_name: clickhouse_server
+  #   env_file:
+  #     - ./src/core/.env 
+
+  #   ports:
+  #     - "8123:8123"   
+  #     - "9000:9000"
+  #   volumes:
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #   networks:
+  #     - main_network_test
+
+
+volumes:
+  clickhouse_data:
+  vertica_data:
+
+networks:
+  main_network_test:
+    name: main_network_test
+    driver: bridge
+
+
+
+
+
+
+  
+
+
+

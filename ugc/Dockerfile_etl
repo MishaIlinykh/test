@@ -1,0 +1,16 @@
+FROM python:3.12.3
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /opt/src
+COPY requirements.txt requirements.txt
+
+# Установите зависимости, предварительно обновив менеджер пакетов pip
+RUN  pip install  --trusted-host pypi.org --trusted-host files.pythonhosted.org --disable-pip-version-check --no-cache-dir --upgrade pip \
+     && pip install  --trusted-host pypi.org --trusted-host files.pythonhosted.org --disable-pip-version-check --no-cache-dir -r requirements.txt
+
+COPY . .
+
+#делаем файл исполняемым
+RUN chmod +x run_etl.sh
+
+ENTRYPOINT ["bash", "run_etl.sh"] 
