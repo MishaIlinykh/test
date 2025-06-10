@@ -33,7 +33,7 @@ jobs:
   notify:
     needs: build
     runs-on: ubuntu-latest
-    if: always() && success()
+    if: always()
     steps:
     - name: Send Telegram notification
       uses: appleboy/telegram-action@v0.3.1
